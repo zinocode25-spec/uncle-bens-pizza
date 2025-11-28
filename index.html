@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uncle Ben's Pizza 🍕 - Delicious Pizza Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/jpg" href="favicon.jpg">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Step 1: Supabase SDK and Initialization -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Paste your Supabase credentials here
+        const supabaseUrl = 'https://tgkiktklknwyohadenbd.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRna2lrdGtsa253eW9oYWRlbmJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNzQ1OTAsImV4cCI6MjA3Nzk1MDU5MH0.74kBuL5I3aORpII7m6fsXavm6Kd1RaLy1byx4mqjnoc';
+
+        // Initialize Supabase and expose the client instance globally
+        // This check prevents errors if the credentials are not filled in yet
+        if (supabaseUrl.startsWith('http')) {
+            window.supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+        }
+    </script>
+
+    <!-- Netlify Identity Widget -->
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+        // Initialize Netlify Identity widget
+        if (window.netlifyIdentity) {
+            netlifyIdentity.on("init", user => {
+                console.log("Netlify Identity initialized:", user);
+            });
+        }
+    </script>
+
+    <style>
+        /* Custom style for the floating cart button visibility */
+        @media (min-width: 801px) {
+            #floating-cart-btn {
+                display: none;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="text-white overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass">
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center">
+                    <img src="favicon.jpg" id="logoImage" alt="Uncle Ben's Pizza" class="h-8 w-8 rounded-full mr-2">
+                    <span class="font-orbitron nav-logo font-bold gradient-text"></span>
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#menu" class="hover:text-blue-400 transition-colors">Menu</a>
+                    <a href="#reviews" class="hover:text-blue-400 transition-colors">Reviews</a>
+                    <a href="#booking" class="hover:text-blue-400 transition-colors">Booking</a>
+                    <a href="#locations" class="hover:text-blue-400 transition-colors">Locations</a>
+                    <a href="#contact" class="hover:text-blue-400 transition-colors">Contact</a>
+                </div>
+                <div id="cartTrackIcons" class="flex items-center space-x-4">
+                    <button id="cart-toggle" class="relative glass px-4 py-2 rounded-lg hover-lift">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button id="tracking" onclick="window.location.href='tracking.html'"
+                        class="glass px-4 py-2 rounded-lg hover-lift">
+                        <i class="fas fa-truck mr-2"></i>Track Order
+                    </button>
+                </div>
+                <button class="md:hidden text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center relative"
+        style="background-image: url('hero.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 80%;">
+        <div id="heroSection" class="container mx-auto px-4 text-center fade-in">
+            <h1 class="font-orbitron text-6xl md:text-8xl font-bold mb-6 my-40 gradient-text">
+                Uncle Ben's Pizza 🍕
+            </h1>
+            <p id="heroText" class="text-xl md:text-2xl mb-8 text-enhanced-white max-w-2xl mx-auto">
+                Experience the Best among the rest of Pizzerias in Ghana @UNCLE BEN'S PIZZA🍕
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="shop.html"
+                    class="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-4 rounded-full font-semibold hover-lift pulse-glow inline-block btn-enhanced text-enhanced-white">
+                    <i class="fas fa-shopping-cart mr-2"></i>Order Now
+                </a>
+                <button class="glass px-8 py-4 rounded-full font-semibold hover-lift btn-enhanced text-enhanced-white">
+                    <a href="#booking"><i class="fas fa-calendar-alt mr-2"></i>Book a Table</a>
+                </button>
+                <button class="glass px-8 py-4 rounded-full font-semibold hover-lift btn-enhanced text-enhanced-white">
+                    <a href="#locations"><i class="fas fa-map-marker-alt mr-2"></i>Find Us</a>
+                </button>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#menu" id="scroll-down-btn" aria-label="Scroll to menu">
+                <i class="fas fa-chevron-down text-2xl text-blue-400"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Order & Delivery Section -->
+    <section id="menu" class="py-20 px-4">
+        <div class="container mx-auto">
+            <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-16 gradient-text fade-in">
+                Our Delicious Menu
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Pizza Card -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in group">
+                    <div class="w-full h-48 rounded-xl mb-4 overflow-hidden">
+                        <img src="premium pizzas.jpg" alt="Premium Pizzas" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 text-enhanced-white">Premium Pizzas</h3>
+                    <p class="text-gray-300 mb-4 card-text-enhanced">Handcrafted with the finest ingredients</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-2xl font-bold text-green-400">₵45</span>
+                        <button onclick="addToCartFromIndex('pizza', 'Premium Pizzas', 45)"
+                            class="bg-gradient-to-r from-green-500 to-blue-500 px-4 py-2 rounded-full text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                            Add to Cart
+                        </button>
+                    </div>
+                    <div class="flex gap-2">
+                        <button disabled
+                            class="flex-1 bg-blue-600 py-2 rounded-lg font-semibold opacity-70 cursor-not-allowed">
+                            Delivery
+                        </button>
+                        <button disabled
+                            class="flex-1 bg-purple-600 py-2 rounded-lg font-semibold opacity-70 cursor-not-allowed">
+                            Pickup
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Jollof Rice Card -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in group">
+                    <div class="w-full h-48 rounded-xl mb-4 overflow-hidden">
+                        <img src="jollof rice.jpg" alt="Jollof Rice" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 text-enhanced-white">Jollof Rice</h3>
+                    <p class="text-gray-300 mb-4 card-text-enhanced">Authentic Ghanaian jollof with a modern twist</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-2xl font-bold text-green-400">₵35</span>
+                        <button onclick="addToCartFromIndex('jollof', 'Jollof Rice', 35)"
+                            class="bg-gradient-to-r from-green-500 to-blue-500 px-4 py-2 rounded-full text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                            Add to Cart
+                        </button>
+                    </div>
+                    <div class="flex gap-2">
+                        <button disabled
+                            class="flex-1 bg-blue-600 py-2 rounded-lg font-semibold opacity-70 cursor-not-allowed">
+                            Delivery
+                        </button>
+                        <button disabled
+                            class="flex-1 bg-purple-600 py-2 rounded-lg font-semibold opacity-70 cursor-not-allowed">
+                            Pickup
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chicken Card -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in group">
+                    <div class="w-full h-48 rounded-xl mb-4 overflow-hidden">
+                        <img src="premium chicken.jpg" alt="Premium Chicken" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 text-enhanced-white">Premium Chicken 🍗</h3>
+                    <p class="text-gray-300 mb-4 card-text-enhanced">Crispy, juicy, and perfectly seasoned</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-2xl font-bold text-green-400">₵40</span>
+                        <button onclick="addToCartFromIndex('chicken', 'Premium Chicken', 40)"
+                            class="bg-gradient-to-r from-green-500 to-blue-500 px-4 py-2 rounded-full text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                            Add to Cart
+                        </button>
+                    </div>
+                    <div class="flex gap-2">
+                        <button disabled
+                            class="flex-1 bg-blue-600 py-2 rounded-lg font-semibold opacity-70 cursor-not-allowed">
+                            Delivery
+                        </button>
+                        <button disabled
+                            class="flex-1 bg-purple-600 py-2 rounded-lg font-semibold opacity-70 cursor-not-allowed">
+                            Pickup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Minerals Section -->
+    <section class="py-20 px-4 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
+        <div class="container mx-auto">
+            <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-16 gradient-text fade-in">
+                Cold Minerals & Drinks
+            </h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                <div class="glass rounded-xl p-4 text-center hover-lift fade-in group">
+                    <div class="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden">
+                        <img src="coca-cola.jpg" alt="Coca-Cola" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold mb-2 text-enhanced-white">Coca-Cola</h4>
+                    <p class="text-sm text-gray-300 mb-3 card-text-enhanced">₵8</p>
+                    <button onclick="addToCartFromIndex('coca-cola', 'Coca-Cola', 8)"
+                        class="w-full bg-gradient-to-r from-red-500 to-pink-500 py-2 rounded-lg text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                        Add to Cart
+                    </button>
+                </div>
+
+                <div class="glass rounded-xl p-4 text-center hover-lift fade-in group">
+                    <div class="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden">
+                        <img src="fanta.jpg" alt="Fanta" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold mb-2 text-enhanced-white">Fanta</h4>
+                    <p class="text-sm text-gray-300 mb-3 card-text-enhanced">₵8</p>
+                    <button onclick="addToCartFromIndex('fanta', 'Fanta', 8)"
+                        class="w-full bg-gradient-to-r from-orange-500 to-red-500 py-2 rounded-lg text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                        Add to Cart
+                    </button>
+                </div>
+
+                <div class="glass rounded-xl p-4 text-center hover-lift fade-in group">
+                    <div class="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden">
+                        <img src="sprite.jpg" alt="Sprite" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold mb-2 text-enhanced-white">Sprite</h4>
+                    <p class="text-sm text-gray-300 mb-3 card-text-enhanced">₵8</p>
+                    <button onclick="addToCartFromIndex('sprite', 'Sprite', 8)"
+                        class="w-full bg-gradient-to-r from-green-500 to-blue-500 py-2 rounded-lg text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                        Add to Cart
+                    </button>
+                </div>
+
+                <div class="glass rounded-xl p-4 text-center hover-lift fade-in group">
+                    <div class="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden">
+                        <img src="malta.jpg" alt="Malta" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold mb-2 text-enhanced-white">Malta</h4>
+                    <p class="text-sm text-gray-300 mb-3 card-text-enhanced">₵10</p>
+                    <button onclick="addToCartFromIndex('malta', 'Malta', 10)"
+                        class="w-full bg-gradient-to-r from-amber-500 to-orange-500 py-2 rounded-lg text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                        Add to Cart
+                    </button>
+                </div>
+
+                <div class="glass rounded-xl p-4 text-center hover-lift fade-in group">
+                    <div class="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden">
+                        <img src="voltic.jpg" alt="Voltic" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold mb-2 text-enhanced-white">Voltic</h4>
+                    <p class="text-sm text-gray-300 mb-3 card-text-enhanced">₵6</p>
+                    <button onclick="addToCartFromIndex('voltic', 'Voltic', 6)"
+                        class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 py-2 rounded-lg text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                        Add to Cart
+                    </button>
+                </div>
+
+                <div class="glass rounded-xl p-4 text-center hover-lift fade-in group">
+                    <div class="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden">
+                        <img src="alvaro.jpg" alt="Alvaro" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold mb-2 text-enhanced-white">Alvaro</h4>
+                    <p class="text-sm text-gray-300 mb-3 card-text-enhanced">₵8</p>
+                    <button onclick="addToCartFromIndex('alvaro', 'Alvaro', 8)"
+                        class="w-full bg-gradient-to-r from-purple-500 to-pink-500 py-2 rounded-lg text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity btn-enhanced text-enhanced-white">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Book a Table Section -->
+    <section id="booking" class="py-20 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-16 gradient-text fade-in">
+                Book Your Table
+            </h2>
+
+            <div class="glass rounded-3xl p-8 md:p-12 fade-in">
+                <form id="reservation-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Full Name</label>
+                            <input id="res-name" name="name" type="text"
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                                placeholder="Enter your full name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Phone Number</label>
+                            <input id="res-phone" name="phone" type="tel"
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                                placeholder="0240597979" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Date</label>
+                            <input id="res-date" name="date" type="date"
+                                class="w-full wi-fit bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Time</label>
+                            <input id="res-time" name="time" type="time"
+                                class="w-full wi-fit bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                                required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Number of Guests</label>
+                        <select id="res-guests" name="guests"
+                            class="w-full guests-fit bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors">
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4 Guests</option>
+                            <option value="5">5+ Guests</option>
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-4 rounded-lg font-semibold text-lg hover-lift pulse-glow">
+                        <i class="fas fa-calendar-check mr-2"></i>Reserve Table
+                    </button>
+                    <div id="reservation-message" class="mt-2 text-sm"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Locations Section -->
+    <section id="locations" class="py-20 px-4 bg-gradient-to-r from-green-900/20 to-blue-900/20">
+        <div class="container mx-auto">
+            <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-16 gradient-text fade-in">
+                Our Locations
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="glass rounded-2xl p-6 hover-lift fade-in group">
+                    <div
+                        class="w-full h-40 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-4 flex items-center justify-center">
+                                                <img src="akim-oda-branch.jpg" alt="Akim Oda Branch" class="w-full h-full object-cover">
+
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Accra</h3>
+                    <p class="text-gray-300 mb-4">Osu, Oxford Street</p>
+                    <button id="accra-directions-btn"
+                        class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-directions mr-2"></i>Get Directions
+                    </button>
+                </div>
+
+                <div class="glass rounded-2xl p-6 hover-lift fade-in group">
+                    <div
+                        class="w-full h-40 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl mb-4 flex items-center justify-center">
+                                                <img src="akim-oda-branch.jpg" alt="Akim Oda Branch" class="w-full h-full object-cover">
+
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Kumasi</h3>
+                    <p class="text-gray-300 mb-4">Adum, Kejetia</p>
+                    <button id="kumasi-directions-btn"
+                        class="w-full bg-gradient-to-r from-green-500 to-blue-500 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors">
+                        <i class="fas fa-directions mr-2"></i>Get Directions
+                    </button>
+                </div>
+
+                <div class="glass rounded-2xl p-6 hover-lift fade-in group">
+                    <div
+                        class="w-full h-40 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl mb-4 flex items-center justify-center">
+                                                <img src="akim-oda-branch.jpg" alt="Akim Oda Branch" class="w-full h-full object-cover">
+
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Asamankese</h3>
+                    <p class="text-gray-300 mb-4">Main Market Area</p>
+                    <button id="asamankese-directions-btn"
+                        class="w-full bg-gradient-to-r from-orange-500 to-red-500 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors">
+                        <i class="fas fa-directions mr-2"></i>Get Directions
+                    </button>
+                </div>
+
+                <div class="glass rounded-2xl p-6 hover-lift fade-in group">
+                    <div class="w-full h-40 rounded-xl mb-4 overflow-hidden">
+                        <img src="akim-oda-branch.jpg" alt="Akim Oda Branch" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Akim Oda</h3>
+                    <p class="text-gray-300 mb-4">Central Business District</p>
+                    <button id="akim-oda-directions-btn"
+                        class="w-full bg-gradient-to-r from-purple-500 to-pink-500 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors">
+                        <i class="fas fa-directions mr-2"></i>Get Directions
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-20 px-4 bg-gradient-to-r from-purple-900/20 to-pink-900/20">
+        <div class="container mx-auto">
+            <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-16 gradient-text fade-in">
+                Customer Reviews
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold">AK</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Ama Kofi</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">"The pizza here is absolutely amazing! The glassmorphic design of the
+                        restaurant is so futuristic and the food quality is top-notch. Highly recommended!"</p>
+                    <div class="text-sm text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>2 days ago
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold">KO</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Kwame Osei</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">"Best jollof rice in Accra! The delivery was super fast and the
+                        packaging was excellent. The neon lighting effects in the restaurant are incredible."</p>
+                    <div class="text-sm text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>1 week ago
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold">EF</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Efua Frimpong</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">"The chicken is perfectly seasoned and crispy. The futuristic
+                        atmosphere makes dining here a unique experience. Will definitely come back!"</p>
+                    <div class="text-sm text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>3 days ago
+                    </div>
+                </div>
+
+                <!-- Review 4 -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold">DM</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">David Mensah</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">"Amazing service and food quality! The minerals are always cold and
+                        refreshing. The booking system is so easy to use."</p>
+                    <div class="text-sm text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>5 days ago
+                    </div>
+                </div>
+
+                <!-- Review 5 -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold">SA</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Sarah Asante</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">"The Supreme Pizza is out of this world! The combination of flavors is
+                        perfect. The glassmorphic design is so Instagram-worthy!"</p>
+                    <div class="text-sm text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>1 week ago
+                    </div>
+                </div>
+
+                <!-- Review 6 -->
+                <div class="glass rounded-2xl p-6 hover-lift fade-in">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold">JA</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">John Appiah</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">"Great food and excellent customer service. The delivery tracking
+                        system is very helpful. Highly recommend for family dinners!"</p>
+                    <div class="text-sm text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>4 days ago
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overall Rating -->
+            <div class="text-center mt-12">
+                <div class="glass rounded-2xl p-8 max-w-2xl mx-auto">
+                    <h3 class="text-2xl font-bold mb-4">Overall Rating</h3>
+                    <div class="flex justify-center items-center mb-4">
+                        <div class="text-6xl font-bold gradient-text mr-4">4.8</div>
+                        <div>
+                            <div class="flex text-yellow-400 text-2xl mb-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="text-gray-300">Based on 247 reviews</p>
+                        </div>
+                    </div>
+                    <button onclick="showReviewForm()"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 rounded-lg font-semibold hover-lift">
+                        <i class="fas fa-star mr-2"></i>Write a Review
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="font-orbitron text-4xl md:text-5xl font-bold text-center mb-16 gradient-text fade-in">
+                Contact Us
+            </h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="glass rounded-3xl p-8 fade-in">
+                    <h3 class="text-2xl font-bold mb-6">Get in Touch</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-phone text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Phone</p>
+                                <p class="text-gray-300">0240597979</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full icon-circle flex items-center justify-center">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Email</p>
+                                <p class="text-gray-300 email-break">info@unclebenspizza.com</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Hours</p>
+                                <p class="text-gray-300">Mon-Sun: 8AM - 10PM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="https://www.facebook.com/unclebenspizza/"
+                                class="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center hover-lift">
+                                <i class="fab fa-facebook-f text-white"></i>
+                            </a>
+                            <a href="https://www.instagram.com/unclebenspizza/"
+                                class="w-12 h-12 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center hover-lift">
+                                <i class="fab fa-instagram text-white"></i>
+                            </a>
+                            <a href="https://www.twitter.com/unclebenspizza/"
+                                class="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full flex items-center justify-center hover-lift">
+                                <i class="fab fa-twitter text-white"></i>
+                            </a>
+                            <a href="https://www.whatsapp.com/unclebenspizza/"
+                                class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center hover-lift">
+                                <i class="fab fa-whatsapp text-white"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-3xl p-8 fade-in">
+                    <h3 class="text-2xl font-bold mb-6">Send us a Message</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <input name="name" type="text" placeholder="Your Name"
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors">
+                        </div>
+                        <div>
+                            <input name="email" type="email" placeholder="Your Email"
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors">
+                        </div>
+                        <div>
+                            <input name="subject" type="text" placeholder="Subject"
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors">
+                        </div>
+                        <div>
+                            <textarea name="message" rows="4" placeholder="Your Message"
+                                class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors resize-none"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-3 rounded-lg font-semibold hover-lift">
+                            <i class="fas fa-paper-plane mr-2"></i>Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass mt-20">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="favicon.jpg" alt="Uncle Ben's Pizza" class="h-8 w-8 rounded-full mr-3">
+                        <h3 class="font-orbitron text-2xl font-bold gradient-text">Uncle Ben's Pizza 🍕</h3>
+                    </div>
+                    <p class="text-gray-300">Experience the future of pizza with our glassmorphic, neon-lit dining
+                        experience.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-blue-400 transition-colors">Home</a></li>
+                        <li><a href="#menu" class="text-gray-300 hover:text-blue-400 transition-colors">Menu</a></li>
+                        <li><a href="#booking" class="text-gray-300 hover:text-blue-400 transition-colors">Booking</a>
+                        </li>
+                        <li><a href="#locations"
+                                class="text-gray-300 hover:text-blue-400 transition-colors">Locations</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-blue-400 transition-colors">Delivery</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-blue-400 transition-colors">Pickup</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-blue-400 transition-colors">Catering</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-blue-400 transition-colors">Events</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300">Phone: 0240597979</li>
+                        <li class="text-gray-300">Email: <span class="email-break">info@unclebenspizza.com</span></li>
+                        <li class="text-gray-300">Hours: 8AM - 10PM</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/20 mt-8 pt-8 text-center">
+                <p class="text-gray-300">&copy; 2025 Uncle Ben's Pizza. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar"
+        class="fixed top-0 right-0 h-full w-96 bg-black bg-opacity-90 backdrop-blur-xl transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Shopping Cart</h2>
+                <button id="close-cart" class="text-2xl hover:text-red-400 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="cart-items" class="flex-1 overflow-y-auto mb-6">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+
+            <div class="border-t border-white/20 pt-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xl font-semibold">Total:</span>
+                    <span id="cart-total" class="text-2xl font-bold text-green-400">₵0</span>
+                </div>
+
+                <div class="space-y-3">
+                    <!-- <a href="shop.html"
+                        class="block w-full bg-gradient-to-r from-green-500 to-blue-500 py-3 rounded-lg font-semibold hover-lift text-center">
+                        <i class="fas fa-shopping-cart mr-2"></i>View Full Menu
+                    </a> -->
+                    <button id="clear-cart" class="w-full glass py-3 rounded-lg font-semibold hover-lift">
+                        <i class="fas fa-trash mr-2"></i>Clear Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Tracking Modal -->
+    <div id="tracking-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden p-4">
+        <div class="glass rounded-3xl p-8 max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Track Your Order</h2>
+                <button id="close-tracking" class="text-2xl hover:text-red-400 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="tracking-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Order Number</label>
+                    <input type="text" id="order-number"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                        placeholder="e.g., UB2024001" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Phone Number</label>
+                    <input type="tel" id="phone-number"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                        placeholder="0240597979" required>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-3 rounded-lg font-semibold hover-lift">
+                    <i class="fas fa-search mr-2"></i>Track Order
+                </button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <p class="text-gray-400 text-sm mb-4">Try these sample orders:</p>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <button onclick="trackOrderFromIndex('UB2024001')"
+                        class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded-full text-sm transition-colors">UB2024001</button>
+                    <button onclick="trackOrderFromIndex('UB2024002')"
+                        class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded-full text-sm transition-colors">UB2024002</button>
+                    <button onclick="trackOrderFromIndex('UB2024003')"
+                        class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded-full text-sm transition-colors">UB2024003</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Form Modal -->
+    <div id="review-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="glass rounded-3xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold gradient-text">Write a Review</h3>
+                <button id="close-review" class="text-2xl hover:text-red-400 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="review-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Your Name</label>
+                    <input name="name" type="text"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Rating</label>
+                    <div class="flex space-x-2" id="rating-stars">
+                        <i class="far fa-star text-2xl text-yellow-400 cursor-pointer hover:text-yellow-300"
+                            data-rating="1"></i>
+                        <i class="far fa-star text-2xl text-yellow-400 cursor-pointer hover:text-yellow-300"
+                            data-rating="2"></i>
+                        <i class="far fa-star text-2xl text-yellow-400 cursor-pointer hover:text-yellow-300"
+                            data-rating="3"></i>
+                        <i class="far fa-star text-2xl text-yellow-400 cursor-pointer hover:text-yellow-300"
+                            data-rating="4"></i>
+                        <i class="far fa-star text-2xl text-yellow-400 cursor-pointer hover:text-yellow-300"
+                            data-rating="5"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Your Review</label>
+                    <textarea name="review" rows="4"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors resize-none"
+                        placeholder="Share your experience..." required></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-3 rounded-lg font-semibold hover-lift">
+                    <i class="fas fa-paper-plane mr-2"></i>Submit Review
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="glass rounded-3xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold gradient-text">Checkout</h3>
+                <button id="close-checkout" class="text-2xl hover:text-red-400 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="checkout-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Full Name</label>
+                    <input name="name" type="text"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Phone Number</label>
+                    <input name="phone" type="tel"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Email Address</label>
+                    <input name="email" type="email"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Delivery Address</label>
+                    <textarea name="address" rows="3"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors resize-none"
+                        required></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Order Type</label>
+                    <select name="orderType"
+                        class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition-colors">
+                        <option>Delivery</option>
+                        <option>Pickup</option>
+                    </select>
+                </div>
+
+                <div class="border-t border-white/20 pt-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-semibold">Order Total:</span>
+                        <span id="checkout-total" class="text-xl font-bold text-green-400">₵0</span>
+                    </div>
+
+                    <button type="submit" id="paystack-btn"
+                        class="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-3 rounded-lg font-semibold hover-lift">
+                        <i class="fas fa-check mr-2"></i>Place Order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Map Modal -->
+    <div id="map-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden p-4">
+        <div class="glass rounded-3xl p-6 max-w-4xl w-full relative">
+            <button id="close-map-modal" class="absolute -top-3 -right-3 w-10 h-10 bg-red-500 rounded-full text-2xl hover:bg-red-400 transition-colors z-10 flex items-center justify-center">
+                 <i class="fas fa-times"></i>
+            </button>
+            <div class="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden">
+                <iframe
+                    id="map-iframe"
+                    class="w-full h-full"
+                    style="border:0;"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Cart Button (mobile + tablet only) -->
+    <div id="floating-cart-btn"
+        class="fixed bottom-6 right-6 z-40 flex items-center justify-center 
+        w-16 h-16 rounded-full shadow-xl cursor-pointer
+        bg-gradient-to-br from-green-400 to-blue-500">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            class="h-7 w-7 text-white" fill="none" 
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                stroke-width="2" 
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.293 2.293A1 1 0 007 17h12m-5 4a1 1 0 100-2 
+                1 1 0 000 2zm-6 0a1 1 0 100-2 1 1 0 000 2z" />
+        </svg>
+
+        <!-- Cart count bubble -->
+        <span id="floating-cart-count"
+            class="absolute -top-1 -right-1 bg-red-600 text-white text-xs 
+            font-bold w-6 h-6 flex items-center justify-center rounded-full shadow-lg">
+            0
+        </span>
+    </div>
+    <script src="script.js"></script>
+ 
+    <!-- PayStack -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+ 
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/68cf2e6a09337d191a0e1737/1j5kkqkkt';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+</body>
+
+</html>

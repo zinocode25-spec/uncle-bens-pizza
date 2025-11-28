@@ -1,0 +1,138 @@
+[
+    {
+        "id": "margherita",
+        "name": "Margherita Pizza",
+        "category": "Pizza",
+        "description": "Classic tomato, mozzarella, and fresh basil",
+        "price": 45,
+        "image": "margherita-pizza.jpg"
+    },
+    {
+        "id": "pepperoni",
+        "name": "Pepperoni Pizza",
+        "category": "Pizza",
+        "description": "Spicy pepperoni with mozzarella cheese",
+        "price": 50,
+        "image": "pepperoni-pizza.jpg"
+    },
+    {
+        "id": "supreme",
+        "name": "Supreme Pizza",
+        "category": "Pizza",
+        "description": "Loaded with all your favorite toppings",
+        "price": 65,
+        "image": "supreme-pizza.jpg"
+    },
+    {
+        "id": "classic-jollof",
+        "name": "Classic Jollof",
+        "category": "Jollof Rice",
+        "description": "Traditional Ghanaian jollof rice",
+        "price": 35,
+        "image": "classic-jollof.jpg"
+    },
+    {
+        "id": "jollof-chicken",
+        "name": "Jollof with Chicken",
+        "category": "Jollof Rice",
+        "description": "Jollof rice served with grilled chicken",
+        "price": 50,
+        "image": "jollof-with-chicken.jpg"
+    },
+    {
+        "id": "jollof-fish",
+        "name": "Jollof with Fish",
+        "category": "Jollof Rice",
+        "description": "Jollof rice with fresh grilled fish",
+        "price": 45,
+        "image": "jollof-with-fish.jpg"
+    },
+    {
+        "id": "grilled-chicken",
+        "name": "Grilled Chicken",
+        "category": "Chicken",
+        "description": "Perfectly seasoned and grilled to perfection",
+        "price": 40,
+        "image": "grilled-chicken.jpg"
+    },
+    {
+        "id": "fried-chicken",
+        "name": "Fried Chicken",
+        "category": "Chicken",
+        "description": "Crispy and golden fried chicken pieces",
+        "price": 45,
+        "image": "fried-chicken.jpg"
+    },
+    {
+        "id": "chicken-wings",
+        "name": "Chicken Wings",
+        "category": "Chicken",
+        "description": "Spicy chicken wings with your choice of sauce",
+        "price": 35,
+        "image": "chicken-wings.jpg"
+    },
+    {
+        "id": "chicken-wings",
+        "name": "Chicken Wings",
+        "category": "Chicken",
+        "description": "Spicy chicken wings with your choice of sauce",
+        "price": 35,
+        "image": "chicken-wings.jpg"
+    },
+    {
+        "id": "chicken-wings",
+        "name": "Chicken Wings",
+        "category": "Chicken",
+        "description": "Spicy chicken wings with your choice of sauce",
+        "price": 35,
+        "image": "chicken-wings.jpg"
+    },
+    {
+        "id": "coca-cola",
+        "name": "Coca-Cola",
+        "category": "Minerals",
+        "description": "Refreshing classic cola",
+        "price": 8,
+        "image": "coca-cola.jpg"
+    },
+    {
+        "id": "fanta",
+        "name": "Fanta",
+        "category": "Minerals",
+        "description": "Bubbly and fruity orange soda",
+        "price": 8,
+        "image": "fanta.jpg"
+    },
+    {
+        "id": "sprite",
+        "name": "Sprite",
+        "category": "Minerals",
+        "description": "Crisp lemon-lime flavor",
+        "price": 8,
+        "image": "sprite.jpg"
+    },
+    {
+        "id": "malta",
+        "name": "Malta",
+        "category": "Minerals",
+        "description": "Rich and sweet malt drink",
+        "price": 10,
+        "image": "malta.jpg"
+    },
+    {
+        "id": "voltic",
+        "name": "Voltic",
+        "category": "Minerals",
+        "description": "Pure and natural mineral water",
+        "price": 6,
+        "image": "voltic.jpg"
+    },
+    {
+        "id": "alvaro",
+        "name": "Alvaro",
+        "category": "Minerals",
+        "description": "Non-alcoholic malt beverage",
+        "price": 8,
+        "image": "alvaro.jpg"
+    }
+]

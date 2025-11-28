@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successful - Uncle Ben's Pizza 🍕</title>
+    <link rel="icon" type="image/jpg" href="favicon.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+        }
+        .font-orbitron { font-family: 'Orbitron', monospace; }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .gradient-text { color: white; }
+        .hover-lift { transition: all 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body class="text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="glass rounded-3xl p-8 md:p-12 max-w-2xl w-full text-center">
+        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center">
+            <i class="fas fa-check text-5xl"></i>
+        </div>
+        <h1 class="font-orbitron text-4xl font-bold mb-4 gradient-text">Payment Successful!</h1>
+        <p class="text-gray-300 mb-8">Thank you for your order. Your meal is being prepared!</p>
+
+        <div class="bg-white/5 rounded-lg p-4 mb-8">
+            <p class="text-gray-400 mb-2">Your Order Number is:</p>
+            <div class="flex items-center justify-center space-x-4">
+                <span id="order-number-display" class="text-2xl font-bold font-mono text-yellow-400"></span>
+                <button id="copy-order-number-btn" class="glass px-3 py-2 rounded-lg hover-lift relative" title="Copy Order Number">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a id="track-order-link" href="tracking.html" class="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-4 rounded-full font-semibold hover-lift inline-block">
+                <i class="fas fa-truck mr-2"></i>Track Your Order
+            </a>
+            <a href="index.html" class="glass px-8 py-4 rounded-full font-semibold hover-lift inline-block">
+                <i class="fas fa-home mr-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const orderNumber = params.get('order_number');
+            const orderNumberDisplay = document.getElementById('order-number-display');
+            const copyBtn = document.getElementById('copy-order-number-btn');
+            const trackLink = document.getElementById('track-order-link');
+
+            if (orderNumber) {
+                orderNumberDisplay.textContent = orderNumber;
+                trackLink.href = `tracking.html#order=${orderNumber}`;
+
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(orderNumber).then(() => {
+                        // Show a temporary "Copied!" message inside the button
+                        const originalIcon = copyBtn.innerHTML;
+                        copyBtn.innerHTML = '<span class="text-green-400">Copied!</span>';
+                        copyBtn.disabled = true;
+
+                        // Revert back to the icon after a short delay
+                        setTimeout(() => {
+                            copyBtn.innerHTML = originalIcon;
+                            copyBtn.disabled = false;
+                        }, 2000);
+
+                        // Also show the site-wide notification if available
+                        if (window.showNotification) window.showNotification('Order number copied!', 'success');
+                    });
+                });
+
+                // Store the order for the "Recent Orders" list on the tracking page
+                const RECENT_ORDERS_KEY = 'uncleBensRecentOrders';
+                let recentOrders = JSON.parse(localStorage.getItem(RECENT_ORDERS_KEY)) || [];
+                
+                // Add the new order to the start of the list if it's not already there
+                if (!recentOrders.includes(orderNumber)) {
+                    recentOrders.unshift(orderNumber);
+                }
+
+                // Keep only the 5 most recent orders
+                recentOrders = recentOrders.slice(0, 5);
+
+                localStorage.setItem(RECENT_ORDERS_KEY, JSON.stringify(recentOrders));
+            }
+
+            // Clear the cart after a successful order
+            localStorage.removeItem('uncleBensCart');
+            localStorage.removeItem('uncleBensQuantities');
+        });
+    </script>
+
+</body>
+</html>
